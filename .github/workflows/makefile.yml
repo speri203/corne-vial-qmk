@@ -1,0 +1,30 @@
+name: Corne Keyboard Firmware
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: avr-gcc
+      run: ./util/qmk_install.sh
+
+    - name: Install dependencies
+      run: python3 -m pip install --user qmk
+
+    - name: Running qmk setup
+      run: qmk setup
+
+    - name: Make submodules
+      run: make git-submodule
+
+    - name: Build firmware
+      run: make crkbd:custom_vial
